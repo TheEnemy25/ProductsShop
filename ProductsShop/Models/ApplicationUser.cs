@@ -7,7 +7,6 @@ namespace ProductsShop.Models
     [Table("ApplicationUser")]
     public class ApplicationUser : IdentityUser
     {
-        [Display(Name = "Full name")]
-        public string FullName { get; set; }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProductsShop.Constants;
+using ProductsShop.Models;
 
 namespace ProductsShop.Data.Context
 {
@@ -7,7 +8,7 @@ namespace ProductsShop.Data.Context
     {
         public static async Task SeederDefaultData(IServiceProvider service)
         {
-            var userManager = service.GetService<UserManager<IdentityUser>>();
+            var userManager = service.GetService<UserManager<ApplicationUser>>();
             var roleManager = service.GetService<RoleManager<IdentityRole>>();
 
             //ADD roles to db
@@ -16,7 +17,7 @@ namespace ProductsShop.Data.Context
 
             //Create admin user
 
-            var admin = new IdentityUser
+            var admin = new ApplicationUser
             {
                 UserName = "admin@gmail.com",
                 Email = "admin@gmail.com",

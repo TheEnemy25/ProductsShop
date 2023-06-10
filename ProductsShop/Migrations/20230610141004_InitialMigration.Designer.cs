@@ -12,8 +12,8 @@ using ProductsShop.Data.Context;
 namespace ProductsShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230610115540_FixDiscountSizeColumnName")]
-    partial class FixDiscountSizeColumnName
+    [Migration("20230610141004_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,10 +179,6 @@ namespace ProductsShop.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
