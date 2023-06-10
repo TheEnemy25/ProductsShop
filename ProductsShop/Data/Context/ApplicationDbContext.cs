@@ -19,6 +19,7 @@ namespace ProductsShop.Data.Context
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<DiscountProduct> DiscountProducts { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +56,18 @@ namespace ProductsShop.Data.Context
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Company)
                 .HasForeignKey(p => p.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ShoppingCartItem>()
+                .HasOne(x => x.Product)
+                .WithMany(x => x.Carts)
+                .HasForeignKey(p => p.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ShoppingCartItem>()
+                .HasOne(x => x.ShoppingCart)
+                .WithMany(x => x.ShoppingCartItems)
+                .HasForeignKey(p => p.ShoppingCartId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

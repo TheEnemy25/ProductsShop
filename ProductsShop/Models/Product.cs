@@ -12,9 +12,9 @@ namespace ProductsShop.Models
         [Required(ErrorMessage = "Full product name is required"), MaxLength(50)]
         public string ProductName { get; set; }
         [Required(ErrorMessage = "Full URL image is required")]
-        public string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
         [Required(ErrorMessage = "Full description is required"), MaxLength(1000)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [Required]
         public int Price { get; set; }
         [Required(ErrorMessage = "Full quantity is required")]
@@ -23,15 +23,16 @@ namespace ProductsShop.Models
         // Product category        
         [Required]
         public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
         //Company
         [Required]
         public int CompanyId { get; set; }
-        [ForeignKey("CompanyId")]
-        public Company Company { get; set; }
         //Relationships
+        [ForeignKey("CompanyId")]
+        public Company? Company { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category? Category { get; set; }
         public List<DiscountProduct>? DiscountProducts { get; set; }
         public List<OrderDetail>? OrderDetails { get; set; }
+        public List<ShoppingCartItem>? Carts { get; set; }
     }
 }

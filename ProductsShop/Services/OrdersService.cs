@@ -28,26 +28,26 @@ namespace ProductsShop.Services
 
         public async Task StoreOrderAsync(List<ShoppingCart> carts, string userId, string userEmailAddress)
         {
-            var order = new Order()
-            {
-                UserId = userId,
-                Email = userEmailAddress
-            };
-            await _context.Orders.AddAsync(order);
-            await _context.SaveChangesAsync();
+            //var order = new Order()
+            //{
+            //    UserId = userId,
+            //    Email = userEmailAddress
+            //};
+            //await _context.Orders.AddAsync(order);
+            //await _context.SaveChangesAsync();
 
-            foreach (var cart in carts)
-            {
-                var orderItem = new OrderDetail()
-                {
-                    Quantity = cart.Amount,
-                    ProductId = cart.Product.Id,
-                    OrderId = order.Id,
-                    UnitPrice = cart.Product.Price
-                };
-                await _context.OrderDetails.AddAsync(orderItem);
-            }
-            await _context.SaveChangesAsync();
+            //foreach (var cart in carts)
+            //{
+            //    var orderItem = new OrderDetail()
+            //    {
+            //        Quantity = cart.NumberOfProducts,
+            //        ProductId = cart.Product.Id,
+            //        OrderId = order.Id,
+            //        UnitPrice = cart.Product.Price
+            //    };
+            //    await _context.OrderDetails.AddAsync(orderItem);
+            //}
+            //await _context.SaveChangesAsync();
         }
     }
 }

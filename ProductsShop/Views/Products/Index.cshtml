@@ -46,8 +46,8 @@
                             @if (item.Quantity > 0)
                             {
                                 <p class="card-text">
-                                    <a class="btn btn-outline-primary float-right"><i class="bi bi-eye-fill"></i>Show Details</a>
-                                    <a class="btn btn-outline-success text-white"><i class="bi bi-cart-plus"></i>Add to Cart($x.xx)</a>
+                                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@item.Id" asp-route-quantity="1"
+                                    class="btn btn-outline-success"><i class="bi bi-cart-plus"></i>Add to Cart($x.xx)</a>
                                 </p>
                             }
                             else
