@@ -35,20 +35,10 @@ namespace ProductsShop.Services
             return result;
         }
 
-        public Task<IEnumerable<Company>> GetAllAsync(params Expression<Func<Company, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Company> GetByIdAsync(int id)
         {
             var result = await _context.Companies.FirstOrDefaultAsync(c => c.Id == id);
             return result;
-        }
-
-        public Task<Company> GetByIdAsync(int id, params Expression<Func<Company, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Company> UpdateAsync(int id, Company entity)
@@ -56,11 +46,6 @@ namespace ProductsShop.Services
             _context.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
-        }
-
-        Task IEntityBaseRepository<Company>.UpdateAsync(int id, Company entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

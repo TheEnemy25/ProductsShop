@@ -8,16 +8,16 @@ namespace ProductsShop.Controllers
 {
     public class CompaniesController : Controller
     {
-        private readonly ICompaniesService _service;
+        private readonly ICompaniesService _companyService;
 
         public CompaniesController(ICompaniesService service)
         {
-            _service = service;
+            _companyService = service;
         }
 
         public async Task<IActionResult> Index()
         {
-            var categies = await _service.GetAllAsync();
+            var categies = await _companyService.GetAllAsync();
             return View(categies);
         }
 
@@ -34,14 +34,14 @@ namespace ProductsShop.Controllers
             {
                 return View(company);
             }
-            await _service.AddAsync(company);
+            await _companyService.AddAsync(company);
             return RedirectToAction(nameof(Index));
         }
 
         //Get Categories/Details/
         public async Task<IActionResult> Details(int id)
         {
-            var companyDetails = await _service.GetByIdAsync(id);
+            var companyDetails = await _companyService.GetByIdAsync(id);
 
             if (companyDetails == null)
             {
@@ -55,7 +55,7 @@ namespace ProductsShop.Controllers
         //Get: Categories/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var companyDetails = await _service.GetByIdAsync(id);
+            var companyDetails = await _companyService.GetByIdAsync(id);
 
             if (companyDetails == null)
             {
@@ -71,14 +71,14 @@ namespace ProductsShop.Controllers
             {
                 return View(company);
             }
-            await _service.UpdateAsync(id, company);
+            await _companyService.UpdateAsync(id, company);
             return RedirectToAction(nameof(Index));
         }
 
         //Get: Categories/Delete/1
         public async Task<IActionResult> Delete(int id)
         {
-            var companyDetails = await _service.GetByIdAsync(id);
+            var companyDetails = await _companyService.GetByIdAsync(id);
 
             if (companyDetails == null)
             {
@@ -90,12 +90,12 @@ namespace ProductsShop.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var companyDetails = await _service.GetByIdAsync(id);
+            var companyDetails = await _companyService.GetByIdAsync(id);
             if (companyDetails == null)
             {
                 return View("NotFound");
             }
-            await _service.DeleteAsync(id);
+            await _companyService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
