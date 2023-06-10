@@ -15,8 +15,8 @@ namespace ProductsShop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var categies = await _discountService.GetActiveDiscountsAsync();
-            return View(categies);
+            var discounts = await _discountService.GetActiveDiscountsAsync();
+            return View(discounts);
         }
 
         //Get: Disount/Create
@@ -32,6 +32,7 @@ namespace ProductsShop.Controllers
             {
                 return View(discount);
             }
+
             await _discountService.AddAsync(discount);
             return RedirectToAction(nameof(Index));
         }
@@ -39,27 +40,14 @@ namespace ProductsShop.Controllers
         //Get Disount/Details/
         public async Task<IActionResult> Details(int id)
         {
-            var companyDetails = await _discountService.GetByIdAsync(id);
-
-            if (companyDetails == null)
-            {
-                return View("NotFound");
-            }
-            else
-            {
-                return View(companyDetails);
-            }
+            var discount = await _discountService.GetByIdAsync(id);
+            return discount is null ? View("NotFound") : View(discount);
         }
         //Get: Disount/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var companyDetails = await _discountService.GetByIdAsync(id);
-
-            if (companyDetails == null)
-            {
-                return View("NotFound");
-            }
-            return View(companyDetails);
+            var discount = await _discountService.GetByIdAsync(id);
+            return discount is null ? View("NotFound") : View(discount);
         }
 
         [HttpPost]
@@ -69,6 +57,7 @@ namespace ProductsShop.Controllers
             {
                 return View(discount);
             }
+
             await _discountService.UpdateAsync(discount);
             return RedirectToAction(nameof(Index));
         }
@@ -76,23 +65,20 @@ namespace ProductsShop.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var categoryDetails = await _discountService.GetByIdAsync(id);
-
-            if (categoryDetails == null)
-            {
-                return View("NotFound");
-            }
-            return View(categoryDetails);
+            var discount = await _discountService.GetByIdAsync(id);
+            return discount is null ? View("NotFound") : View(discount);
         }
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var categoryDetails = await _discountService.GetByIdAsync(id);
-            if (categoryDetails == null)
+
+            if (categoryDetails is null)
             {
                 return View("NotFound");
             }
+
             await _discountService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

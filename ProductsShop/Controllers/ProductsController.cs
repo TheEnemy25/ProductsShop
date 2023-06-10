@@ -54,10 +54,8 @@ namespace ProductsShop.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(NewProductVM product)
         {
-
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).ToList();
                 var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
 
                 ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
@@ -74,7 +72,7 @@ namespace ProductsShop.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var productDetails = await _productsService.GetProductByIdAsync(id);
-            if (productDetails == null) return View("NotFound");
+            if (productDetails is null) return View("NotFound");
 
             var response = new NewProductVM()
             {

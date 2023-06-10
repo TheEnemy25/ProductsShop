@@ -15,8 +15,8 @@ namespace ProductsShop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var categies = await _categoriesService.GetAllAsync();
-            return View(categies);
+            var categories = await _categoriesService.GetAllAsync();
+            return View(categories);
         }
 
         //Get: Categories/Create
@@ -32,6 +32,7 @@ namespace ProductsShop.Controllers
             {
                 return View(category);
             }
+
             await _categoriesService.AddAsync(category);
             return RedirectToAction(nameof(Index));
         }
@@ -39,27 +40,15 @@ namespace ProductsShop.Controllers
         //Get Categories/Details/
         public async Task<IActionResult> Details(int id)
         {
-            var categoryDetails = await _categoriesService.GetByIdAsync(id);
-
-            if (categoryDetails == null)
-            {
-                return View("NotFound");
-            }
-            else
-            {
-                return View(categoryDetails);
-            }
+            var category = await _categoriesService.GetByIdAsync(id);
+            return category is null ? View("NotFound") : View(category);
         }
+
         //Get: Categories/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var categoryDetails = await _categoriesService.GetByIdAsync(id);
-
-            if (categoryDetails == null)
-            {
-                return View("NotFound");
-            }
-            return View(categoryDetails);
+            var category = await _categoriesService.GetByIdAsync(id);
+            return category is null ? View("NotFound") : View(category);
         }
 
         [HttpPost]
@@ -69,6 +58,7 @@ namespace ProductsShop.Controllers
             {
                 return View(category);
             }
+
             await _categoriesService.UpdateAsync(id, category);
             return RedirectToAction(nameof(Index));
         }
@@ -76,23 +66,19 @@ namespace ProductsShop.Controllers
         //Get: Categories/Delete/1
         public async Task<IActionResult> Delete(int id)
         {
-            var categoryDetails = await _categoriesService.GetByIdAsync(id);
-
-            if (categoryDetails == null)
-            {
-                return View("NotFound");
-            }
-            return View(categoryDetails);
+            var category = await _categoriesService.GetByIdAsync(id);
+            return category is null ? View("NotFound") : View(category);
         }
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var categoryDetails = await _categoriesService.GetByIdAsync(id);
-            if (categoryDetails == null)
+            if (categoryDetails is null)
             {
                 return View("NotFound");
             }
+
             await _categoriesService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-`using ProductsShop.Models;
+using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
 
 namespace ProductsShop.Controllers
@@ -32,6 +32,7 @@ namespace ProductsShop.Controllers
             {
                 return View(company);
             }
+
             await _companyService.AddAsync(company);
             return RedirectToAction(nameof(Index));
         }
@@ -39,27 +40,14 @@ namespace ProductsShop.Controllers
         //Get Categories/Details/
         public async Task<IActionResult> Details(int id)
         {
-            var companyDetails = await _companyService.GetByIdAsync(id);
-
-            if (companyDetails == null)
-            {
-                return View("NotFound");
-            }
-            else
-            {
-                return View(companyDetails);
-            }
+            var company = await _companyService.GetByIdAsync(id);
+            return company is null ? View("NotFound") : View(company);
         }
         //Get: Categories/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var companyDetails = await _companyService.GetByIdAsync(id);
-
-            if (companyDetails == null)
-            {
-                return View("NotFound");
-            }
-            return View(companyDetails);
+            var company = await _companyService.GetByIdAsync(id);
+            return company is null ? View("NotFound") : View(company);
         }
 
         [HttpPost]
@@ -69,6 +57,7 @@ namespace ProductsShop.Controllers
             {
                 return View(company);
             }
+
             await _companyService.UpdateAsync(id, company);
             return RedirectToAction(nameof(Index));
         }
@@ -76,23 +65,20 @@ namespace ProductsShop.Controllers
         //Get: Categories/Delete/1
         public async Task<IActionResult> Delete(int id)
         {
-            var companyDetails = await _companyService.GetByIdAsync(id);
-
-            if (companyDetails == null)
-            {
-                return View("NotFound");
-            }
-            return View(companyDetails);
+            var company = await _companyService.GetByIdAsync(id);
+            return company is null ? View("NotFound") : View(company);
         }
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var companyDetails = await _companyService.GetByIdAsync(id);
-            if (companyDetails == null)
+
+            if (companyDetails is null)
             {
                 return View("NotFound");
             }
+
             await _companyService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
