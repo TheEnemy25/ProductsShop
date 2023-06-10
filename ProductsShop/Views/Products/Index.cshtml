@@ -33,10 +33,10 @@
                                 <div>
                                     <p class="card-text">
                                         <b>DiscountPercent: </b>
-                                        @product.Discount.Discrount.ToString()
+                                        @product.Discount.DiscountPercentage.ToString()
                                     </p>
 
-                                    @if (!string.IsNullOrEmpty(product.Discount.Discrount.ToString()))
+                                    @if (!string.IsNullOrEmpty(product.Discount.DiscountPercentage.ToString()))
                                     {
                                         <p class="card-text">
                                             <b>DiscountStartDate: </b>

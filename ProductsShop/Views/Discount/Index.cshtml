@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Discount>
+
 @{
+    ViewData["Title"] = "List of Discounts";
 }
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.DiscountPercentage)</th>
+                    <th>@Html.DisplayNameFor(model => model.StartDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.EndDate)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var discount in Model)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => discount.Name)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelitem => discount.DiscountPercentage)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelitem => discount.StartDate)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelitem => discount.EndDate)
+                        </td>
+                        <td class="align-middle">
+                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@discount.Id"><i class="bi bi-pencil-square"></i>Edit</a>
+                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@discount.Id"><i class="bi bi-eye"></i>Details</a>
+                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@discount.Id"><i class="bi bi-trash"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
+    <a asp-controller="Categories" asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add New
+    </a>
+</div>
