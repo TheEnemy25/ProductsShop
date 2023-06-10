@@ -26,6 +26,7 @@ namespace ProductsShop.Services
                 ImageURL = data.ImageURL,
                 CategoryId = data.CategoryId,
                 CompanyId = data.CompanyId,
+                Quantity= data.Quantity,
 
             };
             await _context.Products.AddAsync(newProduct);
