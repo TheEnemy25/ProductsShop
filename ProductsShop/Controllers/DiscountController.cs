@@ -26,7 +26,7 @@ namespace ProductsShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("CompanyName,ImageURL,Description")] Discount discount)
+        public async Task<IActionResult> Create(Discount discount)
         {
             if (!ModelState.IsValid)
             {
@@ -51,7 +51,7 @@ namespace ProductsShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyName,ImageURL,Description")] Discount discount)
+        public async Task<IActionResult> Edit(Discount discount)
         {
             if (!ModelState.IsValid)
             {

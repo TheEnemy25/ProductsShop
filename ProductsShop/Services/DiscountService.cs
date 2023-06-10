@@ -19,7 +19,7 @@ namespace ProductsShop.Services
         public async Task<List<Discount>> GetActiveDiscountsAsync()
         {
             var discounts = await _context.Discounts
-                .Where(d => d.StartDate >= DateTime.Now && d.EndDate <= DateTime.Now)
+                .Where(d => d.EndDate >= DateTime.Today)
                 .ToListAsync();
 
             return discounts;
