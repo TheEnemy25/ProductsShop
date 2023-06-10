@@ -22,7 +22,7 @@ namespace ProductsShop.Controllers
         }
 
         //Get: Categories/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }

@@ -26,7 +26,7 @@ namespace ProductsShop.Services
             return orders;
         }
 
-        public async Task StoreOrderAsync(List<ShoppingCart> items, string userId, string userEmailAddress)
+        public async Task StoreOrderAsync(List<ShoppingCart> carts, string userId, string userEmailAddress)
         {
             var order = new Order()
             {
@@ -36,14 +36,14 @@ namespace ProductsShop.Services
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
 
-            foreach (var item in items)
+            foreach (var cart in carts)
             {
                 var orderItem = new OrderDetail()
                 {
-                    Quantity = item.Amount,
-                    ProductId = item.Product.Id,
+                    Quantity = cart.Amount,
+                    ProductId = cart.Product.Id,
                     OrderId = order.Id,
-                    UnitPrice = item.Product.Price
+                    UnitPrice = cart.Product.Price
                 };
                 await _context.OrderDetails.AddAsync(orderItem);
             }

@@ -35,20 +35,10 @@ namespace ProductsShop.Services
             return result;
         }
 
-        public Task<IEnumerable<Category>> GetAllAsync(params Expression<Func<Category, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Category> GetByIdAsync(int id)
         {
             var result = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
             return result;
-        }
-
-        public Task<Category> GetByIdAsync(int id, params Expression<Func<Category, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Category> UpdateAsync(int id, Category entity)
@@ -56,11 +46,6 @@ namespace ProductsShop.Services
             _context.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
-        }
-
-        Task IEntityBaseRepository<Category>.UpdateAsync(int id, Category entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

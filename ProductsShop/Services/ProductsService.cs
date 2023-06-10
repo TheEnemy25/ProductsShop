@@ -59,7 +59,8 @@ namespace ProductsShop.Services
             var productDetail = await _context.Products
                 .Include(c => c.Company)
                 .Include(c => c.Category)
-                .Include(dp => dp.DiscountProducts).ThenInclude(d => d.Discount)
+                .Include(dp => dp.DiscountProducts)
+                    .ThenInclude(d => d.Discount)
                 .FirstOrDefaultAsync(n => n.Id == id);
 
             return productDetail;

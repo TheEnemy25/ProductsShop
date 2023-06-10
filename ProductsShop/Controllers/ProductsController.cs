@@ -8,21 +8,21 @@ namespace ProductsShop.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IProductsService _service;
+        private readonly IProductsService _productsService;
 
-        public ProductsController(IProductsService service)
+        public ProductsController(IProductsService productsService)
         {
-            _service = service;
+            _productsService = productsService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var allProducts = await _service.GetAllAsync(m => m.Category , n => n.Company);
+            var allProducts = await _productsService.GetAllAsync(m => m.Category , n => n.Company);
             return View(allProducts);
         }
         public async Task<IActionResult> Filter(string searchString)
         {
-            var allProducts = await _service.GetAllAsync(n => n.ProductName);
+            var allProducts = await _productsService.GetAllAsync(n => n.ProductName);
             if(!string.IsNullOrEmpty(searchString))
             {
                 var filteredResultNew = allProducts.Where(n => string.Equals(n.ProductName, searchString, StringComparison.CurrentCultureIgnoreCase)|| string.Equals(n.Description, searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
@@ -35,14 +35,14 @@ namespace ProductsShop.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
-            var productDetail = await _service.GetProductByIdAsync(id);
+            var productDetail = await _productsService.GetProductByIdAsync(id);
             return View(productDetail);
         }
 
         //GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            var productDropdownsData = await _service.GetNewProductDropdownsValues();
+            var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
 
             ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
             ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
@@ -56,7 +56,7 @@ namespace ProductsShop.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var productDropdownsData = await _service.GetNewProductDropdownsValues();
+                var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
 
                 ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
                 ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
@@ -64,14 +64,14 @@ namespace ProductsShop.Controllers
                 return View(product);
             }
 
-            await _service.AddNewProductAsync(product);
+            await _productsService.AddNewProductAsync(product);
             return RedirectToAction(nameof(Index));
         }
 
         //GET: Product/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var productDetails = await _service.GetProductByIdAsync(id);
+            var productDetails = await _productsService.GetProductByIdAsync(id);
             if (productDetails == null) return View("NotFound");
 
             var response = new NewProductVM()
@@ -86,7 +86,7 @@ namespace ProductsShop.Controllers
                 CompanyId = productDetails.CompanyId,
             };
 
-            var productDropdownsData = await _service.GetNewProductDropdownsValues();
+            var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
             ViewBag.Categories = new SelectList(productDropdownsData.Categories , "Id", "CategoryName");
             ViewBag.Companies = new SelectList(productDropdownsData.Companies , "Id", "CompanyName");
 
@@ -100,7 +100,7 @@ namespace ProductsShop.Controllers
 
             if (!ModelState.IsValid)
             {
-                var productDropdownsData = await _service.GetNewProductDropdownsValues();
+                var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
 
                 ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
                 ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
@@ -108,7 +108,7 @@ namespace ProductsShop.Controllers
                 return View(product);
             }
 
-            await _service.UpdateProductAsync(product);
+            await _productsService.UpdateProductAsync(product);
             return RedirectToAction(nameof(Index));
         }
     }

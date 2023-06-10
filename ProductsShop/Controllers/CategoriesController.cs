@@ -6,21 +6,21 @@ namespace ProductsShop.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly ICategoriesService _service;
+        private readonly ICategoriesService _categoriesService;
 
-        public CategoriesController(ICategoriesService service)
+        public CategoriesController(ICategoriesService categoriesService)
         {
-            _service = service;
+            _categoriesService = categoriesService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var categies = await _service.GetAllAsync();
+            var categies = await _categoriesService.GetAllAsync();
             return View(categies);
         }
 
         //Get: Categories/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -32,14 +32,14 @@ namespace ProductsShop.Controllers
             {
                 return View(category);
             }
-            await _service.AddAsync(category);
+            await _categoriesService.AddAsync(category);
             return RedirectToAction(nameof(Index));
         }
 
         //Get Categories/Details/
         public async Task<IActionResult> Details(int id)
         {
-            var categoryDetails = await _service.GetByIdAsync(id);
+            var categoryDetails = await _categoriesService.GetByIdAsync(id);
 
             if (categoryDetails == null)
             {
@@ -53,7 +53,7 @@ namespace ProductsShop.Controllers
         //Get: Categories/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
-            var categoryDetails = await _service.GetByIdAsync(id);
+            var categoryDetails = await _categoriesService.GetByIdAsync(id);
 
             if (categoryDetails == null)
             {
@@ -69,14 +69,14 @@ namespace ProductsShop.Controllers
             {
                 return View(category);
             }
-            await _service.UpdateAsync(id, category);
+            await _categoriesService.UpdateAsync(id, category);
             return RedirectToAction(nameof(Index));
         }
 
         //Get: Categories/Delete/1
         public async Task<IActionResult> Delete(int id)
         {
-            var categoryDetails = await _service.GetByIdAsync(id);
+            var categoryDetails = await _categoriesService.GetByIdAsync(id);
 
             if (categoryDetails == null)
             {
@@ -88,12 +88,12 @@ namespace ProductsShop.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var categoryDetails = await _service.GetByIdAsync(id);
+            var categoryDetails = await _categoriesService.GetByIdAsync(id);
             if (categoryDetails == null)
             {
                 return View("NotFound");
             }
-            await _service.DeleteAsync(id);
+            await _categoriesService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

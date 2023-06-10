@@ -3,8 +3,12 @@ using ProductsShop.Models;
 
 namespace ProductsShop.Services.Interfaces
 {
-    public interface ICategoriesService : IEntityBaseRepository<Category>
+    public interface ICategoriesService
     {
-        new Task<Category> UpdateAsync(int id, Category entity);
+        public Task AddAsync(Category entity);
+        public Task DeleteAsync(int id);
+        public Task<IEnumerable<Category>> GetAllAsync();
+        public Task<Category> GetByIdAsync(int id);
+        public Task<Category> UpdateAsync(int id, Category entity);
     }
 }
