@@ -17,15 +17,15 @@ namespace ProductsShop.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var allProducts = await _productsService.GetAllAsync(m => m.Category , n => n.Company);
+            var allProducts = await _productsService.GetAllAsync(m => m.Category, n => n.Company);
             return View(allProducts);
         }
         public async Task<IActionResult> Filter(string searchString)
         {
             var allProducts = await _productsService.GetAllAsync(n => n.ProductName);
-            if(!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
-                var filteredResultNew = allProducts.Where(n => string.Equals(n.ProductName, searchString, StringComparison.CurrentCultureIgnoreCase)|| string.Equals(n.Description, searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                var filteredResultNew = allProducts.Where(n => string.Equals(n.ProductName, searchString, StringComparison.CurrentCultureIgnoreCase) || string.Equals(n.Description, searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
                 return View(filteredResultNew);
             }
             return View("Index", allProducts);
@@ -89,8 +89,8 @@ namespace ProductsShop.Controllers
             };
 
             var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
-            ViewBag.Categories = new SelectList(productDropdownsData.Categories , "Id", "CategoryName");
-            ViewBag.Companies = new SelectList(productDropdownsData.Companies , "Id", "CompanyName");
+            ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
+            ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
 
             return View(response);
         }

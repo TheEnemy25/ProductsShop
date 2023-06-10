@@ -1,5 +1,4 @@
-﻿using ProductsShop.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ProductsShop.Data.ViewModels
 {

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ProductsShop.Data.Repositories;
 using System.ComponentModel.DataAnnotations;
-using ProductsShop.Data.Repositories;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductsShop.Models
 {

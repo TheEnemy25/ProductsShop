@@ -4,7 +4,8 @@ namespace ProductsShop.Data.ViewModels
 {
     public class NewProductDropdownsVM
     {
-        public NewProductDropdownsVM() {
+        public NewProductDropdownsVM()
+        {
             Categories = new List<Category>();
             Companies = new List<Company>();
         }

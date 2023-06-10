@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductsShop.Data.Context;
-using ProductsShop.Models;
 using ProductsShop.Services;
 using ProductsShop.Services.Interfaces;
 

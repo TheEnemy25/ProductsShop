@@ -69,7 +69,7 @@ namespace ProductsShop.Services
         public async Task UpdateProductAsync(NewProductVM data)
         {
             var dbProduct = await _context.Products.FirstOrDefaultAsync(n => n.Id == data.Id);
-            
+
             if (dbProduct != null)
             {
                 dbProduct.ProductName = data.ProductName;

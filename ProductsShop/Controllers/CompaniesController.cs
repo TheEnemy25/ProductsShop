@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProductsShop.Data.Context;
-using ProductsShop.Models;
+`using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
 
 namespace ProductsShop.Controllers

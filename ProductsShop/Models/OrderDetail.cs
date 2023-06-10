@@ -7,7 +7,7 @@ namespace ProductsShop.Models
     public class OrderDetail
     {
         [Key]
-        public int Id { get; set; }                
+        public int Id { get; set; }
         [Required]
         public int Quantity { get; set; }
         public int UnitPrice { get; set; }

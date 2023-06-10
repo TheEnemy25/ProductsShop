@@ -1,5 +1,4 @@
-﻿using ProductsShop.Data.Repositories;
-using ProductsShop.Models;
+﻿using ProductsShop.Models;
 
 namespace ProductsShop.Services.Interfaces
 {

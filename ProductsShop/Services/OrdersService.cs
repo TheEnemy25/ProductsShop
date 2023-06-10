@@ -2,7 +2,6 @@
 using ProductsShop.Data.Context;
 using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
-using System;
 
 namespace ProductsShop.Services
 {

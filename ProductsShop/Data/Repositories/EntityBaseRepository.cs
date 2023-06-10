@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ProductsShop.Data.Context;
+using System.Linq.Expressions;
 
 namespace ProductsShop.Data.Repositories
 {

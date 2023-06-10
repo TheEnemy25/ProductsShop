@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductsShop.Data.Context;
-using ProductsShop.Data.ViewModels;
 using ProductsShop.Models;
-using System;
 
 namespace ProductsShop.Data.Cart
 {
