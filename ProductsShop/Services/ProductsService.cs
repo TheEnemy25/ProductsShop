@@ -26,23 +26,11 @@ namespace ProductsShop.Services
                 ImageURL = data.ImageURL,
                 CategoryId = data.CategoryId,
                 CompanyId = data.CompanyId,
-                Quantity= data.Quantity,
-
+                Quantity = data.Quantity,
             };
+
             await _context.Products.AddAsync(newProduct);
             await _context.SaveChangesAsync();
-
-            //Add Product Discount
-            //foreach (var discountId in data.DiscountId)
-            //{
-            //    var newDiscountProduct = new DiscountProduct()
-            //    {
-            //        ProductId = newProduct.Id,
-            //        DiscountId = discountId
-            //    };
-            //    await _context.DiscountProducts.AddAsync(newDiscountProduct);
-            //}
-            //await _context.SaveChangesAsync();
         }
 
         public async Task<List<Product>> GetAllProductsAsync()
