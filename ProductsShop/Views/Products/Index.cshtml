@@ -27,29 +27,21 @@
                     <div class="col-md-6">
                         <div class="card-body">
                             <p class="card-text">@item.Description</p>
-
-                            @*@foreach (var product in item.DiscountProducts)
+                            @*<p class="card-text"><b>Price: </b>@item.Price</p>*@
+                            @if(item.DiscountProducts.Any())
                             {
-                                <div>
-                                    <p class="card-text">
-                                        <b>DiscountPercent: </b>
-                                        @product.Discount.DiscountPercentage.ToString()
-                                    </p>
+                                var activeDiscount = item.DiscountProducts.Where(x => x.Discount.EndDate >= DateTime.Today).FirstOrDefault().Discount;
+                                if (activeDiscount.EndDate >= DateTime.Today)
+                                {
+                                    <p class="card-text"><strike><b>Price: </b>@item.Price</strike></p>
 
-                                    @if (!string.IsNullOrEmpty(product.Discount.DiscountPercentage.ToString()))
-                                    {
-                                        <p class="card-text">
-                                            <b>DiscountStartDate: </b>
-                                            @product.Discount.StartDate.ToString("dd MMM yy")
-                                        </p>
-                                        <p class="card-text">
-                                            <b>DiscountEndDate: </b>
-                                            @product.Discount.EndDate.ToString("dd MMM yy")
-                                        </p>
-                                    }
-                                </div>
-                            }*@
-                            <p class="card-text"><b>Price: </b>@item.Price</p>
+                                    <p class="card-text"><b>Price: </b>@((int)(item.Price * (1 - ((double)activeDiscount.DiscountPercentage / 100))))</p>
+                                }
+                            }
+                            else
+                            {
+                                <p class="card-text"><b>Price: </b>@item.Price</p>
+                            }
                             <p class="card-text">
                                 <b>Quantity: </b>@item.Quantity
                             </p>
@@ -79,7 +71,8 @@
                             <p class="card-text">
                                 <a asp-controller="Products" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary float-right">
                                     <i class="bi bi-eye-fill"></i>
-                                    Show Details</a>
+                                    Show Details
+                                </a>
                                 <a class="btn btn-outline-succes text-white"><i class="bi bi-cart-plus"></i>Add to Cart(Price @item.Price.ToString("c"))</a>
                             </p>
                         </div>

@@ -44,6 +44,18 @@ namespace ProductsShop.Services
             //await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Product>> GetAllProductsAsync()
+        {
+            var products = await _context.Products
+                .Include(x => x.Company)
+                .Include(x => x.Category)
+                .Include(x => x.DiscountProducts)
+                    .ThenInclude(x => x.Discount)
+                .ToListAsync();
+
+            return products;
+        }
+
         public async Task<NewProductDropdownsVM> GetNewProductDropdownsValues()
         {
             var response = new NewProductDropdownsVM()
@@ -79,10 +91,18 @@ namespace ProductsShop.Services
                 dbProduct.CategoryId = data.CategoryId;
                 dbProduct.CompanyId = data.CompanyId;
 
-                await _context.SaveChangesAsync();
+                if (data.DiscountId != default)
+                {
+                    var discountProduct = new DiscountProduct
+                    {
+                        ProductId = dbProduct.Id,
+                        DiscountId = data.DiscountId
+                    };
+                    await _context.DiscountProducts.AddAsync(discountProduct);
+                }
 
+                await _context.SaveChangesAsync();
             }
         }
-
     }
 }

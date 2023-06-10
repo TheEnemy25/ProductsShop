@@ -28,5 +28,8 @@ namespace ProductsShop.Data.ViewModels
         [Display(Name = "Select a company")]
         [Required(ErrorMessage = "Product company is required")]
         public int CompanyId { get; set; }
+
+        [Display(Name = "Select a discount")]
+        public int DiscountId { get; set; }
     }
 }

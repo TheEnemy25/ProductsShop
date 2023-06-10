@@ -9,15 +9,17 @@ namespace ProductsShop.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductsService _productsService;
+        private readonly IDiscountService _discountService;
 
-        public ProductsController(IProductsService productsService)
+        public ProductsController(IProductsService productsService, IDiscountService discountService)
         {
             _productsService = productsService;
+            _discountService = discountService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var allProducts = await _productsService.GetAllAsync(m => m.Category, n => n.Company);
+            var allProducts = await _productsService.GetAllProductsAsync();
             return View(allProducts);
         }
         public async Task<IActionResult> Filter(string searchString)
@@ -87,8 +89,10 @@ namespace ProductsShop.Controllers
             };
 
             var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
+            var availableDiscounts = await _discountService.GetActiveDiscountsAsync();
             ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
             ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
+            ViewBag.Discounts = new SelectList(availableDiscounts, "Id", "Name");
 
             return View(response);
         }
@@ -101,9 +105,11 @@ namespace ProductsShop.Controllers
             if (!ModelState.IsValid)
             {
                 var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
+                var availableDiscounts = await _discountService.GetActiveDiscountsAsync();
 
                 ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
                 ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
+                ViewBag.Discounts = new SelectList(availableDiscounts, "Id", "Name");
 
                 return View(product);
             }
