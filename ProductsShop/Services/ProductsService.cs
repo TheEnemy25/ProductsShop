@@ -32,16 +32,16 @@ namespace ProductsShop.Services
             await _context.SaveChangesAsync();
 
             //Add Product Discount
-            foreach (var discountId in data.DiscountId)
-            {
-                var newDiscountProduct = new DiscountProduct()
-                {
-                    ProductId = newProduct.Id,
-                    DiscountId = discountId
-                };
-                await _context.DiscountProducts.AddAsync(newDiscountProduct);
-            }
-            await _context.SaveChangesAsync();
+            //foreach (var discountId in data.DiscountId)
+            //{
+            //    var newDiscountProduct = new DiscountProduct()
+            //    {
+            //        ProductId = newProduct.Id,
+            //        DiscountId = discountId
+            //    };
+            //    await _context.DiscountProducts.AddAsync(newDiscountProduct);
+            //}
+            //await _context.SaveChangesAsync();
         }
 
         public async Task<NewProductDropdownsVM> GetNewProductDropdownsValues()

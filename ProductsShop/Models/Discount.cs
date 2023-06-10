@@ -9,10 +9,11 @@ namespace ProductsShop.Models
     {
         [Key]
         public int Id { get; set; }
-        public int DiscountPercent { get; set; }
-        public DateTime DiscountStartDate { get; set; }
-        public DateTime DiscountEndDate { get; set; }
+        public string? Name { get; set; }
+        public int Discrount { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         //Relationship
-        public List<DiscountProduct> DiscountProducts { get; set; }
+        public List<DiscountProduct>? DiscountProducts { get; set; }
     }
 }
