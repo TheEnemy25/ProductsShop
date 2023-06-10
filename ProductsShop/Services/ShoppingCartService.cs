@@ -59,6 +59,7 @@ namespace ProductsShop.Services
                 _context.Update(cart.ShoppingCartItems);
                 await _context.SaveChangesAsync();
             }
+            await RecalculateTotalPrice(cart.Id);
         }
 
         public async Task RecalculateTotalPrice(int cartId)
@@ -70,9 +71,16 @@ namespace ProductsShop.Services
 
             if (cart is not null && cart.ShoppingCartItems is not null)
             {
+                foreach (var item in cart.ShoppingCartItems)
+                {
+                    item.TotalPrice = item.Quantity * item.Product.Price;
+                    _context.Update(item);
+                }
+                await _context.SaveChangesAsync();
+
                 var prices = cart.ShoppingCartItems.Select(x => new
                 {
-                    price = x.Product.Price * x.Quantity,
+                    price = x.TotalPrice,
                     quantity = x.Quantity
                 });
 
@@ -118,6 +126,18 @@ namespace ProductsShop.Services
             }
 
             return cart;
+        }
+
+        public async Task RemoveItemFromCartAsync(int cartItemId)
+        {
+            var cartItem = await _context.ShoppingCartItems.FindAsync(cartItemId);
+
+            if (cartItem is not null)
+            {
+                _context.Remove(cartItem);
+                await _context.SaveChangesAsync();
+                await RecalculateTotalPrice(cartItem.ShoppingCartId);
+            }
         }
     }
 }

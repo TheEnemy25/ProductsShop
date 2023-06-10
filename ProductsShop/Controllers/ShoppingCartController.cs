@@ -20,11 +20,15 @@ namespace ProductsShop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(userEmail);
 
+            var cart = await _shoppingCartService.GetActiveCartForUserAsync(user.Id);
+
+            return View(cart);
+        }
 
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
@@ -34,6 +38,13 @@ namespace ProductsShop.Controllers
             await _shoppingCartService.AddToCartAsync(productId, user.Id, quantity);
             
             return RedirectToAction(controllerName: "Products", actionName: "Index");
+        }
+
+        public async Task<IActionResult> RemoveItemFromCart(int cartItemId)
+        {
+            await _shoppingCartService.RemoveItemFromCartAsync(cartItemId);
+
+            return RedirectToAction("Index");
         }
     }
 }
