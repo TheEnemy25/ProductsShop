@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductsShop.Data.Context;
-using ProductsShop.Data.Repositories;
 using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
-using System.Linq.Expressions;
 
 namespace ProductsShop.Services
 {
