@@ -34,13 +34,13 @@ namespace ProductsShop.Data.Context
                 .HasForeignKey(o => o.UserId);
 
             modelBuilder.Entity<DiscountProduct>()
-                .HasOne<Product>(dp => dp.Product)
+                .HasOne(dp => dp.Product)
                 .WithMany(p => p.DiscountProducts)
                 .HasForeignKey(dp => dp.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<DiscountProduct>()
-                .HasOne<Discount>(dp => dp.Discount)
+                .HasOne(dp => dp.Discount)
                 .WithMany(d => d.DiscountProducts)
                 .HasForeignKey(dp => dp.DiscountId)
                 .OnDelete(DeleteBehavior.Cascade);
