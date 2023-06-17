@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
 
 namespace ProductsShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DiscountController : Controller
     {
         private readonly IDiscountService _discountService;

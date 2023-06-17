@@ -10,9 +10,13 @@
             <div class="row g-0">
                 <div class="col-md-12">
                     <div class="card-header text-white bg-info">
-                        <p class="card-text">
-                            <h5 class="card-title">
+                        <p class="card-text ">
+                            <h5 class="card-title larger-text">
                                 @Model.ProductName
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id" class="text-white float-right"><i class="bi bi-pencil-square"></i></a>
+                                }
                             </h5>
                         </p>
                     </div>
@@ -22,65 +26,46 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
+                        <b>Description: </b>
                         <p class="card-text">@Model.Description</p>
                         <p class="card-text">
-                            <b>Cinema: </b>
-                            <a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CategoryId">
+                            <b>Category: </b>
+                            <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">
                                 @Model.Category.CategoryName
                             </a>
                         </p>
                         <p class="card-text">
-                            <b>Producer: </b>
-                            <a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.CompanyId">
+                            <b>Company: </b>
+                            <a asp-controller="Companies" asp-action="Details" asp-route-id="@Model.CompanyId">
                                 @Model.Company.CompanyName
                             </a>
                         </p>
-@*                        <p class="card-text"><b>Category: </b>@Model.MovieCategory</p>
-                        <p class="card-text"><b>Start Date: </b>@Model.StartDate.ToString("dd MMM yy")</p>
-                        <p class="card-text"><b>End Date: </b>@Model.EndDate.ToString("dd MMM yy")</p>*@
-                        <p class="card-text ">
-                            <b>Status: </b>
-@*                            @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
-                            {
-                                <span class="badge bg-success text-white">AVAILABLE</span>
-                            }
-                            else if (DateTime.Now > Model.EndDate)
-                            {
-                                <span class="badge bg-danger text-white">EXPIRED</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-primary text-white">UPCOMING</span>
-                            }*@
-                        </p>
-                        <p class="card-text">
-                            <b>Actors: </b>
                             <hr />
-                            @*<div class="row">
-                                @foreach (var actor in Model.Actors_Movies)
-                                {
-                                    <div class="column text-center">
-                                        <img class="border-info rounded-circle" src="@actor.Actor.ProfilePictureURL" style="max-width: 150px" />
-                                        <br />
-                                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">@actor.Actor.FullName</a>
-                                    </div>
-                                }
-                            </div>*@
-                        </p>
 
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="card-footer">
+                    <div class="card-footer d-flex justify-content-between">
                         <p class="card-text">
                             <a class="btn btn-outline-primary float-right" asp-action="Index">
                                 Back to List
                             </a>
-@*                            <a class="btn btn-success text-white  @((DateTime.Now > Model.EndDate) ? "disabled" : "")" 
-                               asp-controller="Orders" 
-                               asp-action="AddItemToShoppingCart" asp-route-id="@Model.Id"><i class="bi bi-cart-plus"></i> Add to Cart (Price @Model.Price.ToString("c"))</a>*@
                         </p>
+                        <div class="text-right">
+                            @if (Model.Quantity > 0)
+                            {
+                                <p class="card-text">
+                                    <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@Model.Id" asp-route-quantity="1"
+                                       class="btn btn-outline-success"><i class="bi bi-cart-plus"></i>Add to Cart(@Model.Price.ToString("C",new System.Globalization.CultureInfo("en-US")))</a>
+                                </p>
+                            }
+                            else
+                            {
+                                <button class="btn btn-outline-danger" disabled><i class="bi bi-cart-plus"></i>Out of Stock</button>
+                            }
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

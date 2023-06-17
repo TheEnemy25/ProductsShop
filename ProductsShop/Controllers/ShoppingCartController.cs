@@ -26,7 +26,10 @@ namespace ProductsShop.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
 
             var cart = await _shoppingCartService.GetActiveCartForUserAsync(user.Id);
-
+            if (cart == null)
+            {
+                cart = new ShoppingCart();
+            }
             return View(cart);
         }
 
@@ -36,8 +39,8 @@ namespace ProductsShop.Controllers
             var user = await _userManager.FindByEmailAsync(userEmail);
 
             await _shoppingCartService.AddToCartAsync(productId, user.Id, quantity);
-            
-            return RedirectToAction(controllerName: "Products", actionName: "Index");
+
+            return RedirectToAction(controllerName: "ShoppingCart", actionName: "Index");
         }
 
         public async Task<IActionResult> RemoveItemFromCart(int cartItemId)

@@ -29,7 +29,7 @@
                     <td class="align-middle">@order.Id</td>
                     <td class="align-middle">
                         <ul style="list-style-type:none">
-                            @foreach (var item in order.OrderDetails)
+                            @*@foreach (var item in order.ShoppingCart.)
                             {
                                 <li>
                                     <div class="alert alert-info" role="alert">
@@ -41,7 +41,7 @@
                     </td>
                     <td class="align-middle">
                         @order.OrderDetails.Select(m => m.Product.Price * m.Quantity).Sum().ToString("c")
-                    </td>
+                    </td>*@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <td class="align-middle"> @order.User.UserName </td>

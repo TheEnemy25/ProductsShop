@@ -6,6 +6,7 @@ using ProductsShop.Services.Interfaces;
 
 namespace ProductsShop.Controllers
 {
+
     public class ProductsController : Controller
     {
         private readonly IProductsService _productsService;
@@ -17,20 +18,33 @@ namespace ProductsShop.Controllers
             _discountService = discountService;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var allProducts = await _productsService.GetAllProductsAsync();
             return View(allProducts);
         }
+
+        [AllowAnonymous]
         public async Task<IActionResult> Filter(string searchString)
         {
-            var allProducts = await _productsService.GetAllAsync(n => n.ProductName);
+            searchString = searchString?.Trim(); // Видаляємо пробіли з початку і кінця рядка
+
+            var allProducts = await _productsService.GetAllProductsAsync();
+
             if (!string.IsNullOrEmpty(searchString))
             {
-                var filteredResultNew = allProducts.Where(n => string.Equals(n.ProductName, searchString, StringComparison.CurrentCultureIgnoreCase) || string.Equals(n.Description, searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
-                return View(filteredResultNew);
+                var filteredResultNew = allProducts.Where(n =>
+                    n.ProductName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase) ||
+                    n.Description.Contains(searchString, StringComparison.CurrentCultureIgnoreCase) ||
+                    n.Category.CategoryName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase) ||
+                    n.Company.CompanyName.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)
+                ).ToList();
+
+                return View("Index", filteredResultNew);
             }
-            return View("Index", allProducts);
+
+            return RedirectToAction(nameof(Index));
         }
 
         //GET: Products/Details/1
@@ -42,6 +56,7 @@ namespace ProductsShop.Controllers
         }
 
         //GET: Products/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
@@ -52,7 +67,7 @@ namespace ProductsShop.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(NewProductVM product)
         {
@@ -71,6 +86,7 @@ namespace ProductsShop.Controllers
         }
 
         //GET: Product/Edit/1
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var productDetails = await _productsService.GetProductByIdAsync(id);
@@ -97,6 +113,7 @@ namespace ProductsShop.Controllers
             return View(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, NewProductVM product)
         {

@@ -12,8 +12,8 @@ using ProductsShop.Data.Context;
 namespace ProductsShop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230610154130_AddShoppingCartItem")]
-    partial class AddShoppingCartItem
+    [Migration("20230617143629_updatedb1")]
+    partial class updatedb1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -223,7 +223,7 @@ namespace ProductsShop.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("ApplicationUser", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("ProductsShop.Models.Category", b =>
@@ -342,6 +342,9 @@ namespace ProductsShop.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ShoppingCartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -352,38 +355,12 @@ namespace ProductsShop.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ShoppingCartId")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("ProductsShop.Models.OrderDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UnitPrice")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("ProductsShop.Models.Product", b =>
@@ -440,7 +417,13 @@ namespace ProductsShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<int>("NumberOfProducts")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
@@ -473,6 +456,9 @@ namespace ProductsShop.Migrations
 
                     b.Property<int>("ShoppingCartId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -555,32 +541,21 @@ namespace ProductsShop.Migrations
 
             modelBuilder.Entity("ProductsShop.Models.Order", b =>
                 {
+                    b.HasOne("ProductsShop.Models.ShoppingCart", "ShoppingCart")
+                        .WithOne("Order")
+                        .HasForeignKey("ProductsShop.Models.Order", "ShoppingCartId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("ProductsShop.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("ShoppingCart");
+
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ProductsShop.Models.OrderDetail", b =>
-                {
-                    b.HasOne("ProductsShop.Models.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProductsShop.Models.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ProductsShop.Models.Product", b =>
@@ -647,22 +622,18 @@ namespace ProductsShop.Migrations
                     b.Navigation("DiscountProducts");
                 });
 
-            modelBuilder.Entity("ProductsShop.Models.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
-                });
-
             modelBuilder.Entity("ProductsShop.Models.Product", b =>
                 {
                     b.Navigation("Carts");
 
                     b.Navigation("DiscountProducts");
-
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ProductsShop.Models.ShoppingCart", b =>
                 {
+                    b.Navigation("Order")
+                        .IsRequired();
+
                     b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618

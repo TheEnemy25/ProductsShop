@@ -16,6 +16,7 @@ namespace ProductsShop.Models
         [Required(ErrorMessage = "Full description is required"), MaxLength(1000)]
         public string? Description { get; set; }
         [Required]
+        [Display(Name = "Unity Price")]
         public int Price { get; set; }
         [Required(ErrorMessage = "Full quantity is required")]
         public int Quantity { get; set; }
@@ -32,7 +33,6 @@ namespace ProductsShop.Models
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
         public List<DiscountProduct>? DiscountProducts { get; set; }
-        public List<OrderDetail>? OrderDetails { get; set; }
         public List<ShoppingCartItem>? Carts { get; set; }
     }
 }

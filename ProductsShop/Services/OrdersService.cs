@@ -16,7 +16,7 @@ namespace ProductsShop.Services
 
         public async Task<List<Order>> GetOrdersByUserIdAndRoleAsync(string userId, string userRole)
         {
-            var orders = await _context.Orders.Include(n => n.OrderDetails).ThenInclude(n => n.Product).Include(n => n.User).ToListAsync();
+            var orders = await _context.Orders.Include(n => n.ShoppingCart).ThenInclude(n => n.ShoppingCartItems).ThenInclude(n => n.Product).Include(n => n.User).ToListAsync();
 
             if (userRole != "Admin")
             {
@@ -28,26 +28,7 @@ namespace ProductsShop.Services
 
         public async Task StoreOrderAsync(List<ShoppingCart> carts, string userId, string userEmailAddress)
         {
-            //var order = new Order()
-            //{
-            //    UserId = userId,
-            //    Email = userEmailAddress
-            //};
-            //await _context.Orders.AddAsync(order);
-            //await _context.SaveChangesAsync();
 
-            //foreach (var cart in carts)
-            //{
-            //    var orderItem = new OrderDetail()
-            //    {
-            //        Quantity = cart.NumberOfProducts,
-            //        ProductId = cart.Product.Id,
-            //        OrderId = order.Id,
-            //        UnitPrice = cart.Product.Price
-            //    };
-            //    await _context.OrderDetails.AddAsync(orderItem);
-            //}
-            //await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
 
@@ -20,11 +21,13 @@ namespace ProductsShop.Controllers
         }
 
         //Get: Categories/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([Bind("CategoryName,ImageURL,Description")] Category category)
         {
@@ -45,12 +48,14 @@ namespace ProductsShop.Controllers
         }
 
         //Get: Categories/Edit/1
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _categoriesService.GetByIdAsync(id);
             return category is null ? View("NotFound") : View(category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,ImageURL,Description")] Category category)
         {
@@ -64,12 +69,14 @@ namespace ProductsShop.Controllers
         }
 
         //Get: Categories/Delete/1
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _categoriesService.GetByIdAsync(id);
             return category is null ? View("NotFound") : View(category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

@@ -19,7 +19,7 @@ namespace ProductsShop.Models
         public ApplicationUser User { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         //Relationships
-        public List<OrderDetail> OrderDetails { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
+        public int ShoppingCartId { get; set; }
     }
 }
-//public bool IsDeleted { get; set; } = false;

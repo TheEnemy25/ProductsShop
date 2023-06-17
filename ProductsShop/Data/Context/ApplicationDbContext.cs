@@ -14,7 +14,6 @@ namespace ProductsShop.Data.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Company> Companies { get; set; }
@@ -25,9 +24,6 @@ namespace ProductsShop.Data.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ShoppingCart>().ToTable(nameof(ShoppingCart));
-
-            modelBuilder.Entity<ApplicationUser>()
-                .ToTable(nameof(ApplicationUser));
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
@@ -69,6 +65,18 @@ namespace ProductsShop.Data.Context
                 .WithMany(x => x.ShoppingCartItems)
                 .HasForeignKey(p => p.ShoppingCartId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.ShoppingCart)
+                .WithOne(s => s.Order)
+                .HasForeignKey<ShoppingCart>(s => s.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ShoppingCart>()
+                .HasOne(o => o.Order)
+                .WithOne(s => s.ShoppingCart)
+                .HasForeignKey<Order>(s => s.ShoppingCartId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

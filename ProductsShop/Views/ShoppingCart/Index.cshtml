@@ -11,35 +11,175 @@
                 <tr>
                     <th>@Html.DisplayNameFor(model => model.ShoppingCartItems.FirstOrDefault().Product.ImageURL)</th>
                     <th>@Html.DisplayNameFor(model => model.ShoppingCartItems.FirstOrDefault().Product.ProductName)</th>
+                    <th>@Html.DisplayNameFor(model => model.ShoppingCartItems.FirstOrDefault().Product.Price)</th>
                     <th>@Html.DisplayNameFor(model => model.ShoppingCartItems.FirstOrDefault().Quantity)</th>
                     <th>@Html.DisplayNameFor(model => model.ShoppingCartItems.FirstOrDefault().TotalPrice)</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.ShoppingCartItems)
+                @if (Model.ShoppingCartItems == null)
                 {
-                    <tr>
-                        <td class="align-middle">
-                            <img class="rounded-circle" src="@item.Product.ImageURL" alt="@item.Product.ImageURL" style="max-width:150px" />
-                        </td>
-                        <td class="align-middle">
-                            <img class="rounded-circle" src="@item.Product.ProductName" alt="@item.Product.ProductName" style="max-width:150px" />
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Quantity)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelitem => item.TotalPrice)
-                        </td>
-                        <td class="align-middle">
-                            <a class="btn btn-outline-danger" asp-controller="ShoppingCart" asp-action="RemoveItemFromCart" asp-route-cartItemId="@item.Id"><i class="bi bi-trash"></i>Delete</a>
-                        </td>
-                    </tr>
+                    <p> Cart is Empty</p>
+                }
+                else
+                {
+                    @foreach (var item in Model.ShoppingCartItems)
+                    {
+                        <tr>
+                            <td class="align-middle">
+                                <img class="rounded-circle" src="@item.Product.ImageURL" alt="@item.Product.ImageURL" style="max-width:150px" />
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Product.ProductName)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelitem => item.Product.Price)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelitem => item.TotalPrice)
+                            </td>
+                            <td class="align-middle">
+                                <a class="btn btn-outline-danger" asp-controller="ShoppingCart" asp-action="RemoveItemFromCart" asp-route-cartItemId="@item.Id"><i class="bi bi-trash"></i>Delete</a>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
         <p>Total price: @Model.TotalPrice</p>
         <p>Total items: @Model.NumberOfProducts</p>
     </div>
+    <div class="text-right d-flex justify-content-end">
+        <div class="btn-group">
+            <div id="paypal-btn"></div>
+            <span style="padding:5px"></span>
+            <a class="btn btn-outline-success" asp-controller="Products" asp-action="Index">
+                Add more items
+            </a>
+        </div>
+    </div>
 </div>
+
+
+
+@section Scripts{
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+    <script>
+
+        let _total = @Html.Raw(Model.TotalPrice);
+
+        paypal.Button.render({
+            //Configure environment
+            env: 'sandbox',
+            client: {
+                sandbox: 'AcKRtgL4i68EZ2ZYuYUx3ilihAg2YhL5dtF_m19A8MjBWVOn6ewNS4M_uV8gA3xi98zTcUq38gUHbVFx'
+            },
+
+            //Customize button
+            locale: 'en_US',
+            style: {
+                size: 'small',
+                color: 'gold',
+                shape: 'pill'
+            },
+            commit: true,
+
+            //Set up a payment
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: _total,
+                            currency: 'USD'
+                        }
+                    }]
+                });
+            },
+
+            //Execute the payment
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute().then(function () {
+                    var url = '@Url.Action("CompleteOrder", "Orders", new { })';
+                    window.location.href = url;
+                });
+            }
+
+        }, '#paypal-btn')
+    </script>
+}
+
+
+
+
+
+
+
+
+@*@section scripts {
+    <script>
+        $(document).ready(function () {
+            $(".plus-btn").on("click", function () {
+                var cartItemId = $(this).data("cart-item-id");
+                var quantityElement = $(this).closest("tr").find(".quantity");
+                var totalPriceElement = $(this).closest("tr").find(".total-price");
+                var currentQuantity = parseInt(quantityElement.text());
+
+                // Оновити кількість на клієнтському боці
+                quantityElement.text(currentQuantity + 1);
+
+                // Оновити загальну ціну на клієнтському боці
+                var currentTotalPrice = parseFloat(totalPriceElement.text());
+                var itemPrice = currentTotalPrice / currentQuantity;
+                var newTotalPrice = itemPrice * (currentQuantity + 1);
+                totalPriceElement.text(newTotalPrice.toFixed(2));
+
+                // Оновити значення Total price і Total items на клієнтському боці
+                var totalItems = parseInt($("#total-items").text());
+                var totalPrice = parseFloat($("#total-price").text());
+                $("#total-items").text(totalItems + 1);
+                $("#total-price").text((totalPrice + itemPrice).toFixed(2));
+
+                // Оновити значення Total price і Total items відповідно до оновленої кількості на клієнтському боці
+                var newTotalItems = parseInt($("#total-items").text());
+                var newTotalPrice = parseFloat($("#total-price").text());
+                $.post("/ShoppingCart/UpdateTotal", { totalItems: newTotalItems, totalPrice: newTotalPrice });
+            });
+
+            $(".minus-btn").on("click", function () {
+                var cartItemId = $(this).data("cart-item-id");
+                var quantityElement = $(this).closest("tr").find(".quantity");
+                var totalPriceElement = $(this).closest("tr").find(".total-price");
+                var currentQuantity = parseInt(quantityElement.text());
+
+                if (currentQuantity > 1) {
+                    // Оновити кількість на клієнтському боці
+                    quantityElement.text(currentQuantity - 1);
+
+                    // Оновити загальну ціну на клієнтському боці
+                    var currentTotalPrice = parseFloat(totalPriceElement.text());
+                    var itemPrice = currentTotalPrice / currentQuantity;
+                    var newTotalPrice = itemPrice * (currentQuantity - 1);
+                    totalPriceElement.text(newTotalPrice.toFixed(2));
+
+                    // Оновити значення Total price і Total items на клієнтському боці
+                    var totalItems = parseInt($("#total-items").text());
+                    var totalPrice = parseFloat($("#total-price").text());
+                    $("#total-items").text(totalItems - 1);
+                    $("#total-price").text((totalPrice - itemPrice).toFixed(2));
+
+                    // Оновити значення Total price і Total items відповідно до оновленої кількості на клієнтському боці
+                    var newTotalItems = parseInt($("#total-items").text());
+                    var newTotalPrice = parseFloat($("#total-price").text());
+                    $.post("/ShoppingCart/UpdateTotal", { totalItems: newTotalItems, totalPrice: newTotalPrice });
+                }
+            });
+        });
+    </script>
+}
+*@

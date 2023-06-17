@@ -33,9 +33,24 @@ namespace ProductsShop.Data.Repositories
         public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _context.Set<T>();
-            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-            return await query.ToListAsync();
 
+            foreach (var includeProperty in includeProperties)
+            {
+                if (includeProperty.Body is MemberExpression memberExpression)
+                {
+                    query = query.Include(memberExpression.Member.Name);
+                }
+                else if (includeProperty.Body is UnaryExpression unaryExpression && unaryExpression.Operand is MemberExpression operand)
+                {
+                    query = query.Include(operand.Member.Name);
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid include property expression.");
+                }
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id) => await _context.Set<T>().FirstOrDefaultAsync(n => n.Id == id);
@@ -43,7 +58,23 @@ namespace ProductsShop.Data.Repositories
         public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _context.Set<T>();
-            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+            foreach (var includeProperty in includeProperties)
+            {
+                if (includeProperty.Body is MemberExpression memberExpression)
+                {
+                    query = query.Include(memberExpression.Member.Name);
+                }
+                else if (includeProperty.Body is UnaryExpression unaryExpression && unaryExpression.Operand is MemberExpression operand)
+                {
+                    query = query.Include(operand.Member.Name);
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid include property expression.");
+                }
+            }
+
             return await query.FirstOrDefaultAsync(n => n.Id == id);
         }
 

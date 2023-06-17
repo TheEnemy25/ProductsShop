@@ -10,11 +10,12 @@ namespace ProductsShop.Models
         public int NumberOfProducts { get; set; }
         public double TotalPrice { get; set; }
         public bool IsActive { get; set; }
-
         [Required]
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser? User { get; set; }
+        public Order Order { get; set; }
+        public int OrderId { get; set; }
         public List<ShoppingCartItem>? ShoppingCartItems { get; set; }
     }
 }

@@ -7,26 +7,23 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/style.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3 align-items-center">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Products" asp-action="Index">eTickets</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Products" asp-action="Index">
+                            <a class="nav-link text-dark larger-text" asp-controller="Products" asp-action="Index">
                                 <i class="bi bi-ui-checks-grid"></i>
                                 Products
                             </a>
                         </li>
-
-                        <li class="nav-item dropdown">
+                        @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown justify-content-center">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="bi bi-gear"></i> Management
                             </a>
@@ -34,10 +31,10 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" asp-controller="Companies" asp-action="Index"><i class="bi bi-people"></i> Companies</a>
                                 <a class="dropdown-item" asp-controller="Categories" asp-action="Index"><i class="bi bi-collection"></i> Categories</a>
-                                <a class="dropdown-item" asp-controller="Discount" asp-action="Index"><i class="bi bi-collection"></i> Discounts</a>
+                                    <a class="dropdown-item" asp-controller="Discount" asp-action="Index"><i class="bi bi-percent"></i> Discounts</a>
                             </div>
                         </li>
-
+                        }
                     </ul>
 
                     <form class="form-inline my-2 my-lg-0" asp-controller="Products" asp-action="Filter" style="padding-right: 25px;">
@@ -46,7 +43,7 @@
                             <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                         </div>
                     </form>
-                    <a asp-controller="ShoppingCart" asp-action="Index">Cart</a>
+                    <a asp-controller="ShoppingCart" asp-action="Index"><i class="bi bi-cart fs-5 me-1"></i></a>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
