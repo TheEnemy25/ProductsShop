@@ -25,6 +25,7 @@ namespace ProductsShop.Services
 
             if (product is not null)
             {
+                cart.ShoppingCartItems ??= new List<ShoppingCartItem>();
                 var cartItem = cart.ShoppingCartItems.FirstOrDefault(x => x.ProductId == productId);
                 if (cartItem is null)
                 {
