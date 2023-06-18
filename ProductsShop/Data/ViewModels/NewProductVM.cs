@@ -14,6 +14,7 @@ namespace ProductsShop.Data.ViewModels
         [Display(Name = "Price in $")]
         [Required(ErrorMessage = "Price is required")]
         public int Price { get; set; }
+        [Display(Name = "Quantity")]
         [Required(ErrorMessage = "Full quantity is required")]
         public int Quantity { get; set; }
         [Display(Name = "Image poster URL")]

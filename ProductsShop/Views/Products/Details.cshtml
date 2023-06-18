@@ -28,9 +28,9 @@
                     <div class="card-body">
                         <b>Description: </b>
                         <p class="card-text">@Model.Description</p>
-                        <p class="card-text">
+                        <p class="card-text mb-1">
                             <b>Category: </b>
-                            <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">
+                            <a asp-controller="Products" asp-action="List" asp-route-category="@Model.Category.CategoryName">
                                 @Model.Category.CategoryName
                             </a>
                         </p>

@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProductsShop.Data.ViewModels;
+using ProductsShop.Models;
 using ProductsShop.Services.Interfaces;
 
 namespace ProductsShop.Controllers
 {
-
     public class ProductsController : Controller
     {
         private readonly IProductsService _productsService;
@@ -133,6 +133,62 @@ namespace ProductsShop.Controllers
 
             await _productsService.UpdateProductAsync(product);
             return RedirectToAction(nameof(Index));
+        }
+
+        [Route("Product/List")]
+        [Route("Product/List/{category}")]
+        public async Task<IActionResult> List(string category, decimal? minPrice, decimal? maxPrice, string sortOrder)
+        {
+            IEnumerable<Product> products;
+
+            if (string.IsNullOrEmpty(category))
+            {
+                products = await _productsService.GetAllProductsAsync();
+            }
+            else
+            {
+                products = await _productsService.GetProductsByCategoryAsync(category);
+            }
+
+            if (minPrice.HasValue)
+            {
+                products = products.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                products = products.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            if (!string.IsNullOrEmpty(sortOrder))
+            {
+                if (sortOrder == "price_desc")
+                {
+                    products = products.OrderByDescending(p => p.Price);
+                }
+                else if (sortOrder == "price_asc")
+                {
+                    products = products.OrderBy(p => p.Price);
+                }
+                else if (sortOrder == "name_asc")
+                {
+                    products = products.OrderBy(p => p.ProductName);
+                }
+                else if (sortOrder == "name_desc")
+                {
+                    products = products.OrderByDescending(p => p.ProductName);
+                }
+            }
+
+            ViewBag.AllProducts = products;
+            ViewBag.CurrentCategory = category;
+            ViewBag.SortOrder = sortOrder;
+
+            var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
+            ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
+            ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
+
+            return View();
         }
     }
 }

@@ -13,7 +13,10 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3 align-items-center">
             <div class="container-fluid">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark larger-text" asp-controller="Products" asp-action="Index">
@@ -21,19 +24,18 @@
                                 Products
                             </a>
                         </li>
-                        @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown justify-content-center">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-gear"></i> Management
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="Companies" asp-action="Index"><i class="bi bi-people"></i> Companies</a>
-                                <a class="dropdown-item" asp-controller="Categories" asp-action="Index"><i class="bi bi-collection"></i> Categories</a>
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-gear"></i> Management
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Companies" asp-action="Index"><i class="bi bi-people"></i> Companies</a>
+                                    <a class="dropdown-item" asp-controller="Categories" asp-action="Index"><i class="bi bi-collection"></i> Categories</a>
                                     <a class="dropdown-item" asp-controller="Discount" asp-action="Index"><i class="bi bi-percent"></i> Discounts</a>
-                            </div>
-                        </li>
+                                </div>
+                            </li>
                         }
                     </ul>
 

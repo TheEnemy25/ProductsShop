@@ -67,6 +67,12 @@ namespace ProductsShop.Services
             return productDetail;
         }
 
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(string category)
+        {
+            var products = await _context.Products.Where(p => p.Category.CategoryName == category).ToListAsync();
+            return products;
+        }
+
         public async Task UpdateProductAsync(NewProductVM data)
         {
             var dbProduct = await _context.Products.FirstOrDefaultAsync(n => n.Id == data.Id);
@@ -75,6 +81,7 @@ namespace ProductsShop.Services
             {
                 dbProduct.ProductName = data.ProductName;
                 dbProduct.Description = data.Description;
+                dbProduct.Quantity = data.Quantity;
                 dbProduct.Price = data.Price;
                 dbProduct.ImageURL = data.ImageURL;
                 dbProduct.CategoryId = data.CategoryId;

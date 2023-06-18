@@ -9,6 +9,7 @@ namespace ProductsShop.Services.Interfaces
         Task<Product> GetProductByIdAsync(int id);
         Task<List<Product>> GetAllProductsAsync();
         Task<NewProductDropdownsVM> GetNewProductDropdownsValues();
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(string category);
         Task AddNewProductAsync(NewProductVM data);
         Task UpdateProductAsync(NewProductVM data);
     }

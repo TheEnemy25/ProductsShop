@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<div class="container">
+    <form id="filterForm" method="get" action="@Url.Action("List")" class="mb-4">
+        <div class="col-lg-6">
+            <div class="col-md-4 col-lg-3 mb-1">
+                <div class="form-group">
+                    <label for="minPrice">Min Price:</label>
+                    <input type="number" id="minPrice" name="minPrice" class="form-control" placeholder="Enter min price" value="@ViewBag.MinPrice" />
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-1">
+                <div class="form-group">
+                    <label for="maxPrice">Max Price:</label>
+                    <input type="number" id="maxPrice" name="maxPrice" class="form-control" placeholder="Enter max price" value="@ViewBag.MaxPrice" />
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-3 mb-1">
+                <button type="submit" class="btn btn-primary w-100">Apply</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-lg-3">
+                <div class="form-group">
+                    <label for="sortOrder">Sort Order:</label>
+                    <select id="sortOrder" name="sortOrder" class="form-control">
+                        <option value="">-- Select Sort Order --</option>
+                        <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc")">Price: High to Low</option>
+                        <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc")">Price: Low to High</option>
+                        <option value="name_asc" selected="@(ViewBag.SortOrder == "name_asc")">Name: A to Z</option>
+                        <option value="name_desc" selected="@(ViewBag.SortOrder == "name_desc")">Name: Z to A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @if (ViewBag.AllProducts != null && ((IEnumerable<Product>)ViewBag.AllProducts).Any())
+    {
+        <div class="row">
+
+            @if (!string.IsNullOrEmpty(ViewBag.CurrentCategory))
+            {
+                <h3 class="larger-text mb-1">Current Category: @ViewBag.CurrentCategory</h3>
+            }
+
+            @foreach (var product in ((IEnumerable<Product>)ViewBag.AllProducts).ToList())
+            {
+                <div class="col-md-4 col-xs-6 border-primary mb-3">
+                    <div class="card mb-3">
+                        <div class="card-header text-white bg-info">
+                            <h5 class="card-title larger-text">
+                                @product.ProductName
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="text-white float-right"><i class="bi bi-pencil-square"></i></a>
+                                }
+                            </h5>
+                        </div>
+                        <div class="image-container text-center p-3">
+                            <img src="@product.ImageURL" style="max-height: 200px; width: auto;" alt="@product.ProductName" />
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text mb-1">
+                                <b>Quantity: </b>@product.Quantity
+                            </p>
+                            <p class="card-text mb-1">
+                                <b>Company: </b>
+                                <a asp-controller="Companies" asp-action="Details" asp-route-id="@product.CompanyId">
+                                    @product.Company.CompanyName
+                                </a>
+                            </p>
+                            <p class="card-text mb-1">
+                                <b>Category: </b>
+                                <a asp-controller="Products" asp-action="List" asp-route-category="@product.Category.CategoryName">
+                                    @product.Category.CategoryName
+                                </a>
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between pb-2 px-3">
+                            <div>
+                                <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-primary">
+                                    <i class="bi bi-eye-fill"></i>
+                                    Show Details
+                                </a>
+                            </div>
+                            <div class="text-right">
+                                @if (product.Quantity > 0)
+                                {
+                                    <p class="card-text">
+                                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@product.Id" asp-route-quantity="1" class="btn btn-outline-success">
+                                            <i class="bi bi-cart-plus"></i> Add to Cart (@product.Price.ToString("C", new System.Globalization.CultureInfo("en-US")))
+                                        </a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-danger" disabled>
+                                        <i class="bi bi-cart-plus"></i> Out of Stock
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No products found.</p>
+    }
+</div>
+
+<script>
+    const form = document.getElementById('filterForm');
+    const sortOrderSelect = document.getElementById('sortOrder');
+
+    sortOrderSelect.addEventListener('change', function () {
+        form.submit();
+    });
+</script>
