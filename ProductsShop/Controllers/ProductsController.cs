@@ -106,9 +106,14 @@ namespace ProductsShop.Controllers
 
             var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
             var availableDiscounts = await _discountService.GetActiveDiscountsAsync();
+
+            // Add "No Discount" option to the list of discounts
+            var discountsList = new List<Discount> { new Discount { Id = 0, Name = "No Discount" } };
+            discountsList.AddRange(availableDiscounts);
+
             ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
             ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
-            ViewBag.Discounts = new SelectList(availableDiscounts, "Id", "Name");
+            ViewBag.Discounts = new SelectList(discountsList, "Id", "Name");
 
             return View(response);
         }
@@ -124,9 +129,13 @@ namespace ProductsShop.Controllers
                 var productDropdownsData = await _productsService.GetNewProductDropdownsValues();
                 var availableDiscounts = await _discountService.GetActiveDiscountsAsync();
 
+                // Add "No Discount" option to the list of discounts
+                var discountsList = new List<Discount> { new Discount { Id = 0, Name = "No Discount" } };
+                discountsList.AddRange(availableDiscounts);
+
                 ViewBag.Categories = new SelectList(productDropdownsData.Categories, "Id", "CategoryName");
                 ViewBag.Companies = new SelectList(productDropdownsData.Companies, "Id", "CompanyName");
-                ViewBag.Discounts = new SelectList(availableDiscounts, "Id", "Name");
+                ViewBag.Discounts = new SelectList(discountsList, "Id", "Name");
 
                 return View(product);
             }
@@ -134,6 +143,7 @@ namespace ProductsShop.Controllers
             await _productsService.UpdateProductAsync(product);
             return RedirectToAction(nameof(Index));
         }
+
 
         [Route("Product/List")]
         [Route("Product/List/{category}")]

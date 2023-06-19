@@ -87,16 +87,31 @@ namespace ProductsShop.Services
                 dbProduct.CategoryId = data.CategoryId;
                 dbProduct.CompanyId = data.CompanyId;
 
+                var existingDiscountProduct = await _context.DiscountProducts.FirstOrDefaultAsync(dp => dp.ProductId == dbProduct.Id);
+
                 if (data.DiscountId != default)
                 {
-                    var discountProduct = new DiscountProduct
+                    if (existingDiscountProduct != null)
                     {
-                        ProductId = dbProduct.Id,
-                        DiscountId = data.DiscountId
-                    };
-                    await _context.DiscountProducts.AddAsync(discountProduct);
+                        existingDiscountProduct.DiscountId = data.DiscountId;
+                    }
+                    else
+                    {
+                        var discountProduct = new DiscountProduct
+                        {
+                            ProductId = dbProduct.Id,
+                            DiscountId = data.DiscountId
+                        };
+                        await _context.DiscountProducts.AddAsync(discountProduct);
+                    }
                 }
-
+                else
+                {
+                    if (existingDiscountProduct != null)
+                    {
+                        _context.DiscountProducts.Remove(existingDiscountProduct);
+                    }
+                }
                 await _context.SaveChangesAsync();
             }
         }
