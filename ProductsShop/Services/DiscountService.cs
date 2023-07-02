@@ -21,9 +21,10 @@ namespace ProductsShop.Services
             var discounts = await _context.Discounts
                 .Where(d => d.EndDate >= DateTime.Today)
                 .ToListAsync();
+
             return discounts;
         }
-        //asd
+
         public async Task<Discount> AddAsync(Discount discount)
         {
             await _context.AddAsync(discount);
